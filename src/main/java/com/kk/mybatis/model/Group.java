@@ -200,4 +200,16 @@ public class Group {
     public void setModifier(String modifier) {
         this.modifier = modifier == null ? null : modifier.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", createTime=" + createTime +
+                ", creator='" + creator + '\'' +
+                ", modifyTime=" + modifyTime +
+                ", modifier='" + modifier + '\'' +
+                '}';
+    }
 }

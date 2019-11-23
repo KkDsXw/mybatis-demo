@@ -6,9 +6,10 @@
     <!--属性-->
     <properties resource="config.properties" />
 
-    <typeHandlers>
+    <!--自定义类型转化器-->
+    <!--<typeHandlers>
         <typeHandler handler="com.kk.mybatis.type.KkTypeHandler"/>
-    </typeHandlers>
+    </typeHandlers>-->
 
     <plugins>
         <plugin interceptor="com.kk.mybatis.plugins.KkUpdatePlugin"></plugin>
