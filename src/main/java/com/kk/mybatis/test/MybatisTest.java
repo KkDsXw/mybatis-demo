@@ -6,6 +6,7 @@ import com.kk.mybatis.config.MybatisConfiguration;
 import com.kk.mybatis.config.MybatisConfigurationXml;
 import com.kk.mybatis.mapper.GroupMapper;
 import com.kk.mybatis.model.Group;
+import com.kk.mybatis.model.GroupRuler;
 import com.kk.mybatis.page.KkPageHelper;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -13,7 +14,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -131,6 +131,7 @@ public class MybatisTest {
 
     /**
      * 拦截所有的更新，添加修改时间和修改人
+     * 依赖 com.kk.mybatis.plugins.KkUpdatePlugin
      *
      * @author kk.xie
      * @date 2019/11/20 17:10
@@ -147,6 +148,8 @@ public class MybatisTest {
 
     /**
      * github分页插件使用
+     * 核心： com.github.pagehelper.PageInterceptor  plugins
+     * 使用ThreadLocal实现
      *
      * @author kk.xie
      * @date 2019/11/21 11:51
@@ -165,6 +168,7 @@ public class MybatisTest {
 
     /**
      * 自定义分页插件使用，使用前先在mybatis-config.xml中注册
+     * 依赖： com.kk.mybatis.page.KkPageInterceptor plugins
      *
      * @author kk.xie
      * @date 2019/11/21 11:51
@@ -183,5 +187,99 @@ public class MybatisTest {
         KkPageHelper.startPage(1,3);
         groupList = mapper.selectAll();
         Assert.assertEquals(3, groupList.size());
+    }
+
+    /*
+    * 缓存测试
+    * 1. 一级缓存
+    * 2. 二级缓存
+    * 3. 关联查询值懒加载
+    * */
+
+
+    /**
+     * 一级缓存测试，session级别的缓存
+     * 同一个session 中查询两次 则不会重新查询，不同session则会重新查询
+     *
+     * @param
+     * @return void
+     * @throws
+     * @author kk.xie
+     * @date 2019/11/26 19:07
+     */
+    @Test
+    public void selectOneCache(){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        GroupMapper mapper = sqlSession.getMapper(GroupMapper.class);
+        // session-1 首次查询
+        Group group = mapper.selectByPrimaryKey(1L);
+        // session-1 再次查询
+        mapper.selectByPrimaryKey(1L);
+
+        // session-2 首次查询
+        sqlSession = sqlSessionFactory.openSession();
+        mapper = sqlSession.getMapper(GroupMapper.class);
+        mapper.selectByPrimaryKey(1L);
+    }
+
+    /**
+     * 二级缓存测试，Mapper级别的测试
+     * 1、首先在mapper.xml中开启二级缓存
+     * 2、不同的session,相同的查询仅会查询一次
+     *
+     * @param
+     * @return void
+     * @throws
+     * @author kk.xie
+     * @date 2019/11/26 19:10
+     */
+    @Test
+    public void selectTwoCache(){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        GroupMapper mapper = sqlSession.getMapper(GroupMapper.class);
+        // session-1 首次查询
+        mapper.selectByPrimaryKey(1L);
+        //这个close必须要加，不然缓存存不进去。
+        sqlSession.close();
+
+        // session-2 首次查询
+        sqlSession = sqlSessionFactory.openSession();
+        mapper = sqlSession.getMapper(GroupMapper.class);
+        mapper.selectByPrimaryKey(1L);
+    }
+
+    /**
+     * mybatis 联合查询，一次查询并返回所有值
+     *
+     * @param
+     * @return void
+     * @throws
+     * @author kk.xie
+     * @date 2019/11/26 19:28
+     */
+    @Test
+    public void selectGroupRulerJoin(){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        GroupMapper mapper = sqlSession.getMapper(GroupMapper.class);
+        GroupRuler groupRuler = mapper.selectGroupRulerJoin(4L);
+        System.out.println(groupRuler);
+    }
+
+    /**
+     * mybatis 嵌套查询，先查询主数据，再逐一查询主数据的关系数据
+     * 其中有懒加载
+     *
+     * @param
+     * @return void
+     * @throws
+     * @author kk.xie
+     * @date 2019/11/26 19:29
+     */
+    @Test
+    public void selectGroupRulerOne2More(){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        GroupMapper mapper = sqlSession.getMapper(GroupMapper.class);
+        GroupRuler groupRuler = mapper.selectGroupRulerOne2More(4L);
+        System.out.println(groupRuler);
     }
 }

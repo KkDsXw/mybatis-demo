@@ -1,6 +1,8 @@
 package com.kk.mybatis.mapper;
 
 import com.kk.mybatis.model.Group;
+import com.kk.mybatis.model.GroupRuler;
+import com.kk.mybatis.model.Ruler;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -66,4 +68,10 @@ public interface GroupMapper {
     Group selectTypeHandlerNameById(long id);
 
     List<Group> selectAll();
+
+    GroupRuler selectGroupRulerJoin(Long id);
+
+    GroupRuler selectGroupRulerOne2More(Long id);
+
+    Ruler selectByRulerId(Long id);
 }

@@ -77,7 +77,7 @@
 			identity="true"/> </table> -->
 
 		<!-- 部分表生成 -->
-		<table tableName="tbl_group" domainObjectName="Group"
+		<table tableName="tbl_ruler" domainObjectName="Ruler"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false">

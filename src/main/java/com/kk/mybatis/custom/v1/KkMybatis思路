@@ -1,6 +1,6 @@
 1.Mybatis框架的核心类
     SqlSession
-        最核心，查询是会话级的操作，会管理代理MapperProxy，回去Mapper,同时会委托Executor进行执行
+        最核心，查询是会话级的操作，会管理代理MapperProxy，获取Mapper,同时会委托Executor进行执行
     Configuration
         核心配置，记录查询方法与xml中sql语句的映射
     MapperProxy

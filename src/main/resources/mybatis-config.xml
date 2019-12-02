@@ -6,6 +6,13 @@
     <!--属性-->
     <properties resource="config.properties" />
 
+    <settings>
+        <!--开启二级缓存，全局配置-->
+        <setting name="cacheEnabled" value="true"/>
+        <!--启动懒加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false" />
+    </settings>
     <!--自定义类型转化器-->
     <!--<typeHandlers>
         <typeHandler handler="com.kk.mybatis.type.KkTypeHandler"/>
