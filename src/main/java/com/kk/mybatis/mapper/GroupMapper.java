@@ -74,4 +74,6 @@ public interface GroupMapper {
     GroupRuler selectGroupRulerOne2More(Long id);
 
     Ruler selectByRulerId(Long id);
+
+    List<Group> selectByIdList(@Param("idList") List<Long> idList);
 }

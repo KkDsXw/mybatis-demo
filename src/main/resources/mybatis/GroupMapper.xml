@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kk.mybatis.mapper.GroupMapper">
   <!--开启二级缓存配置，同时要在环境配置总共配置-->
-  <!--<cache/>-->
+  <cache/>
 
   <resultMap id="BaseResultMap" type="com.kk.mybatis.model.Group">
     <!--
@@ -122,6 +122,16 @@
     where
     t1.id = t2.group_id
     and t1.id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByIdList" resultType="com.kk.mybatis.model.Group">
+    select
+    <include refid="Base_Column_List" />
+    from tbl_group
+    where id in
+    <foreach collection="idList" item="item" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

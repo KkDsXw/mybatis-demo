@@ -212,13 +212,8 @@ public class MybatisTest {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         GroupMapper mapper = sqlSession.getMapper(GroupMapper.class);
         // session-1 首次查询
-        Group group = mapper.selectByPrimaryKey(1L);
-        // session-1 再次查询
         mapper.selectByPrimaryKey(1L);
-
-        // session-2 首次查询
-        sqlSession = sqlSessionFactory.openSession();
-        mapper = sqlSession.getMapper(GroupMapper.class);
+        // session-1 再次查询
         mapper.selectByPrimaryKey(1L);
     }
 
