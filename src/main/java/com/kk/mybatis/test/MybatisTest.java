@@ -277,4 +277,9 @@ public class MybatisTest {
         GroupRuler groupRuler = mapper.selectGroupRulerOne2More(4L);
         System.out.println(groupRuler);
     }
+
+    @Test
+    public void show(){
+        System.out.println("------");
+    }
 }
